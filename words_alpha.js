@@ -61338,23 +61338,35 @@ const dictionary = [
     "zucchini",
     "zurich"]
 
-
-function randomWord() {
-    var item = dictionary.length;
+/**
+ * Determines a Random word from the array of 6 letters
+ * @param {*} sixLetterArray 
+ * @returns the 6 letter random word 
+ */
+function randomWord(sixLetterArray) {
+    var item = sixLetterArray.length;
     var randomNum = Math.trunc(Math.random() * item);
     console.log(randomNum);
     var word = dictionary[randomNum];
     console.log(word);
     return word;
 };
-
+/**
+ * Determines if a word is the correct length
+ * @param {*} word 
+ * @returns boolean 
+ */
 function correctLength(word) {
     if (word.length <= 6 && word.length >= 3) {
         return true;
     }
     return false;
 }
-
+/**
+ * Puts a word into an array of letters
+ * @param {*} word 
+ * @returns 
+ */
 function arrOfLetters(word) {
     let arr = []
     for (var i = 0; i <= word.length; i++) {
@@ -61364,17 +61376,9 @@ function arrOfLetters(word) {
     return arr;
 }
 
-function possibleWords(word) {
-    let wordArr = []
-    var letterArr = arrOfLetters(word);
-    //get arr of letters for the word then go through the dictionary find words that are bigger than 3 and less than 6. if they contain letters then add them 
-    for (var i = 0; i <= dictionary.length(); i++) {
-        var item = dictionary[i];
-
-    }
-}
 /**
  * Determines if the letters in item can be found within word1
+ * Assumes all letters are lower case
  * @param {*} word1 is the largest word
  * @param {*} word2 is a possible word
  */
@@ -61382,23 +61386,191 @@ function correctWord(word1, item) {
     var wordArr = arrOfLetters(word1);                  //creates an array for the 6 letter word
     var itemArr = arrOfLetters(item);                   //creates an array for the word that might be inside the 6 letter word
     if (correctLength(item)) {
-        for (var i = itemArr.length; i >= 0; i--) {
+        for (var i = itemArr.length - 1; i >= 0; i--) {
             var letter = itemArr[i];                //determines what letter is at the i position in itemArr
             console.log("i" + i);
             console.log("Letter:" + letter);
-            if (wordArr.includes(letter)) {
-                itemArr.splice(itemArr.indexOf(letter), 1);
+            if (wordArr.includes(letter)) {                 //determines if the letter is in the word 
+                itemArr.splice(itemArr.indexOf(letter), 1); //if it is remove from both arrays 
                 wordArr.splice(wordArr.indexOf(letter), 1);
+            } else {
+                return false;
             }
             console.log(wordArr);
             console.log(itemArr);
         }
-        if (itemArr.length > 0) {
-            return false;
+        if (itemArr.length > 0) {       //if all items have been removed from itemArr then all letters in item are in arr
+            return false;               //so return true because the word could be a possible word.
         } else {
             return true;
         }
     }
 }
+////////NOT MINE 
+ function getPermutations(string) {
+    var results = [];
 
-console.log(correctWord("zither", "tier"));
+    if (string.length === 1) 
+    {
+      results.push(string);
+      return results;
+    }
+
+    for (var i = 0; i < string.length; i++) 
+    {
+      var firstChar = string[i];
+      var otherChar = string.substring(0, i) + string.substring(i + 1);
+      var otherPermutations = getPermutations(otherChar);
+      
+      for (var j = 0; j < otherPermutations.length; j++) {
+        results.push(firstChar + otherPermutations[j]);
+      }
+    }
+
+    return results;
+  }
+
+  function getAllSubstrings(str) {
+    var i, j, result = [];
+  
+    for (i = 0; i < str.length; i++) {
+        for (j = i + 1; j < str.length + 1; j++) {
+            result.push(str.slice(i, j));
+        }
+    }
+    return result;
+  }
+
+  /*
+  Makes the substring of the string 
+  Determines the permutations of all the substrings 
+  */
+ function permOfSubstring(string){
+var arra = new Array();
+  var theString = string;
+  var len = getAllSubstrings(theString).length;
+for(var b=0; b<len; b++){
+    var str = getAllSubstrings(theString);
+    var word = str[b];  
+    var arr = getPermutations(word);
+    arra.push(arr[b]);
+    console.log(getPermutations(word));
+    
+}
+ }
+ permOfSubstring('abc');
+     
+
+  
+/**
+ * Removes all the strings that are too long or too short
+ * @returns newArray of correct length strings
+ */
+function removeWrongLength() {
+    var updatedDictionary = []
+    for (var i = 0; i < dictionary.length; i++) {
+        if (correctLength(dictionary[i])) {
+            updatedDictionary.push(dictionary[i]);
+            console.log(dictionary[i]);
+        }
+    }
+    console.log(updatedDictionary.length);
+    return updatedDictionary;
+}
+
+/**
+ * 
+ * @param {*} baseWord is the 6 letter, longest word
+ */
+function listOfWords(baseWord) {
+    var updated = removeWrongLength();
+    var listArr = [];
+    for (var i = 0; i <= updated.length; i++) {
+        var word = updated[i];
+        if (correctWord(baseWord, word)) {
+            listArr.push(word);
+        }
+    }
+    console.log(listArr);
+}
+
+function containsLetter(letter, diction){
+    var arr = new Array();
+    for(var i=0; i<diction.length; i++){
+        var word = diction[i];
+        console.log(word);
+        if(word.includes(letter)){
+            arr.push(word);
+        }
+    }
+}
+
+/**
+ * Finds All 6 letter words in the dictionary
+ * @returns Array of all 6 letter words
+ */
+function sixLetterWords(){
+    var updatedDiction = removeWrongLength();
+    var sixLetterArr = new Array();
+    for(var i=0; i<=updatedDiction.length-1; i++){
+        if(updatedDiction[i].length==6){
+            sixLetterArr.push(updatedDiction[i]);
+        }
+    }
+    return sixLetterArr;
+}
+
+
+
+//correctWord("zither", "his")
+//listOfWords("zither");
+//console.log(sixLetterWords());
+
+
+function hashMapOfWords(diction){
+    var map1 = new Map();
+    map1.set("a");
+    map1.set("b");
+    map1.set("c");
+    map1.set("d");
+    map1.set("e");
+    map1.set("f");
+    map1.set("g");
+    map1.set("h");
+    map1.set("i");
+    map1.set("j");
+    map1.set("k");
+    map1.set("l");
+    map1.set("m");
+    map1.set("n");
+    map1.set("o");
+    map1.set("p");
+    map1.set("q");
+    map1.set("r");
+    map1.set("s");
+    map1.set("t");
+    map1.set("u");
+    map1.set("v");
+    map1.set("w");
+    map1.set("x");
+    map1.set("y");
+    map1.set("z");
+    for(var i=0; i<=map1.size-1; i++){
+        var arr = new Array();
+        var letter = map1[i++];
+        console.log(letter);
+        console.log("here")
+        for(var i=0; i<diction.length; i++){
+           var word = diction[i];
+            if(word.includes(letter)){
+                arr.push(word);
+                console.log(word);
+           }
+            map1.set(letter,arr);
+       }
+    }
+    console.log(map1.keys());
+    console.log(map1.values());
+
+    
+}

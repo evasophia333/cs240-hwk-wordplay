@@ -4,9 +4,8 @@
 // 
 function randomWord() {
     var randomNum = Math.random();
-    var item = dictionary.length();
-    console.log(item);
+    var item =
+        console.log(item);
 };
 
 
-randomWord();
