@@ -61543,27 +61543,124 @@ function removeWrongLength() {
 function scramble(rootWord) {
     var finArr = new Array();
     var arrOfLet = arrOfLetters(rootWord);
+    console.log(arrOfLet)
     for (var i = 0; i <= arrOfLet.length; i++) {
         var randomNum = Math.trunc(Math.random() * arrOfLet.length);
         var pos = arrOfLet[randomNum];
         finArr.push(pos);
+        //console.log(randomNum)
         var index = arrOfLet.indexOf(pos);
         arrOfLet.splice(index, 1);
         i = 0;
     }
     return finArr;
 }
+//console.log(scramble('exists'));
 
-function printedArrOnScreen(possibleWords) {
+function printedArrOnScreen(guess, possibleWords) {
+    for (var i = 0; i < possibleWords.length; i++) {
 
+    }
 }
+
+////var words = findAllWordsPossible('exists');
+//console.log(words);
+//printedArrOnScreen(words);
 
 //console.log(findAllWordsPossible(randomWord()));
 function printOnScreen() {
     var rootWord = randomWord();
-    var possibleWords = findAllWordsPossible(rootWord);
-    var scramb = scramble(rootWrod);
-
+    console.log(rootWord);                          //determine random root word
+    var possibleWords = findAllWordsPossible(rootWord);     //determines all posible word combinations 
+    var scramb = scramble(rootWord);                        //scrambles the root word
+    var wordsGuessed = new Array();
+    //console.log(scramb)
+    console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
+    //prints the empty list of letters to the screen 
+    printInList(printer(null, possibleWords));
     let input = prompt('Enter a Guess:');
+    while (input != null) {
+        if (input == '*') {
+            scramb = scramble(rootWord);
+            console.clear();
+            alert("scrambling letters....!");
+            console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
+            printInList(printer(null, possibleWords));
+        } else if (input.length < 3 || input.length > 6) {
+            alert("insufficient length of word! Please enter a 3-6 letter word");
+        } else if (possibleWords.includes(input)) {
+            if (!wordsGuessed.includes(input)) {
+                wordsGuessed.push(input);
+                alert("CORRECT!!");
+                if (wordsGuessed.length == possibleWords.length) {
+                    alert("CONGRATS YOU WIN!!");
+                    console.log('ALL WORDS WERE GUESSED!')
+                    console.log(wordsGuessed);
+                    input == null;
+                } else {
+                    console.clear();
+                    console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
+                    printInList(printer(input, possibleWords));
+                }
+            } else {
+                alert("Already Guessed this word!!");
+                console.clear();
+                console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
+                printInList(printer(input, possibleWords));
+            }
+        } else if (input.length >= 3 && input.length <= 6 && !dictionary.includes(input)) {
+            alert("Not an English word!");
+            console.clear();
+            console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
+            printInList(printer(null, possibleWords));
+
+        }
+        input = prompt('Enter a Guess:');
+    }
+    if (input == null) {
+        console.clear();
+        console.log("Good Try! Here were the word combinations:");
+        console.log(possibleWords);
+    }
 }
 
+function printer(guessedArray, possibleWords) {
+    var guessedWords = new Array();
+    var word = '';
+
+    for (var a = 0; a < possibleWords.length; a++) {
+        for (var b = 0; b < possibleWords[a].length; b++) {
+            word += '_ ';
+            if (possibleWords[a].length == b + 1) {
+                guessedWords.push(word);
+                word = '';
+            }
+        }
+    }
+    for (var b = 0; b < guessedArray.length; b++) {
+        var gussedWrd = guessedArray[b];
+        console.log(gussedWrd)
+        console.log(guessedWords)
+        if (possibleWords.includes(gussedWrd)) {
+            var index = possibleWords.indexOf(guessedWords);
+            guessedWords.splice(index, 1, gussedWrd);
+        }
+    }
+    console.log(guessedWords);
+    console.log(possibleWords)
+    return guessedWords;
+
+}
+/**
+ * 
+ * @param {*} guessed return gussed WOrds should be input here
+ */
+function printInList(guessed) {
+    for (var i = 0; i < guessed.length; i++) {
+        console.log(guessed[i] + '\n');
+    }
+}
+var possibleWords = findAllWordsPossible('exists');
+var guessed = ['sex', 'exists', 'sit', 'exit']
+printer(guessed, possibleWords);
+//printOnScreen();
