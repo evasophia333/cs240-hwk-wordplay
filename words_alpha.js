@@ -61346,7 +61346,7 @@ function arrOfLetters(word) {
     let arr = []
     for (var i = 0; i < word.length; i++) {
         var item = word.substring(i, i + 1);
-        arr.push(item);
+        arr.push(item);                         //adds each letter
     }
     return arr;
 }
@@ -61358,15 +61358,15 @@ function arrOfLetters(word) {
 function getPermutations(string) {
     var results = new Array();
     if (string.length === 1) {
-        results.push(string);
+        results.push(string);                   //only one letter then add
         return results;
     }
     for (var i = 0; i < string.length; i++) {
         var firstChar = string[i];
         var otherChar = string.substring(0, i) + string.substring(i + 1);
-        var otherPermutations = getPermutations(otherChar);
+        var otherPermutations = getPermutations(otherChar);     //otherwise call recusrivley on the rest of the string
         for (var j = 0; j < otherPermutations.length; j++) {
-            results.push(firstChar + otherPermutations[j]);
+            results.push(firstChar + otherPermutations[j]);     //push all results onto the result array
         }
     }
     return results;
@@ -61382,7 +61382,7 @@ function substrings(str1) {
     var arr = new Array();
     var temp = "";
     for (var x = 0; x < str1.length; x++) {
-        finalArr[x] = str1.substring(x, y);
+        finalArr[x] = str1.substring(x, y);     //find the substring from x to y and add to finalArr
         y++;
     }
     for (var i = 0; i < Math.pow(2, finalArr.length); i++) {
@@ -61393,10 +61393,10 @@ function substrings(str1) {
             }
         }
         if (temp != "") {
-            arr.push(temp);
+            arr.push(temp);         //add the substring 
         }
     }
-    return arr;
+    return arr;         //provide the user with the substrings
 }
 
 /**
@@ -61410,12 +61410,12 @@ function permOfSubstring(string) {
     var theString = string;
     var len = substrings(theString).length;
     for (var b = 0; b < len; b++) {
-        var str = substrings(theString);
+        var str = substrings(theString);        //get all substrings
         var word = str[b];
         var arr = getPermutations(word);
         for (var i = 0; i < arr.length; i++) {
             if (arr[i].length >= 3 && !arra.includes(arr[i])) {
-                arra.push(arr[i]);
+                arra.push(arr[i]);          //get permutations of all substrings and add to arra
             }
         }
     }
@@ -61429,9 +61429,8 @@ function permOfSubstring(string) {
  */
 function hashLength() {
     var dict = removeWrongLength();
-
     var hashWords = new Map();
-    var arr3 = new Array();
+    var arr3 = new Array();     //create maps for each length letter
     var arr4 = new Array();
     var arr5 = new Array();
     var arr6 = new Array();
@@ -61443,7 +61442,7 @@ function hashLength() {
         var word1 = dict[i];
         if (word1.length >= 3 && word1.length <= 6) {
             if (word1.length == 3) {
-                arr3.push(word1);
+                arr3.push(word1);       //if the length corresponds then push the word
             } else if (word1.length == 4) {
                 arr4.push(word1);
 
@@ -61466,7 +61465,7 @@ function hashLength() {
  */
 function hashOfPerms(sixLetterWord) {
     var arrOfPerm = permOfSubstring(sixLetterWord);
-    var hashWords = new Map();
+    var hashWords = new Map();                      //same as above but with the six letter word
     var arr3 = new Array();
     var arr4 = new Array();
     var arr5 = new Array();
@@ -61507,7 +61506,7 @@ function findAllWordsPossible(sixLetterWord) {
         var words = hashLength().get(a + 3);
         for (var i = 0; i < locations.length; i++) {
             var elements = locations[i];
-            if (words.includes(elements)) {
+            if (words.includes(elements)) {     //if the element can be found in the list of words then add it 
                 finalArr.push(elements);
             }
         }
@@ -61536,7 +61535,7 @@ function removeWrongLength() {
     var updatedDictionary = []
     for (var i = 0; i < dictionary.length; i++) {
         if (dictionary[i].length <= 6 && dictionary[i].length >= 3) {
-            updatedDictionary.push(dictionary[i]);
+            updatedDictionary.push(dictionary[i]);                      //only adds words that are longer than 2 letters and shorter than 7
         }
     }
     return updatedDictionary;
@@ -61551,7 +61550,7 @@ function scramble(rootWord) {
     var finArr = new Array();
     var arrOfLet = arrOfLetters(rootWord);
     for (var i = 0; i <= arrOfLet.length; i++) {
-        var randomNum = Math.trunc(Math.random() * arrOfLet.length);
+        var randomNum = Math.trunc(Math.random() * arrOfLet.length);        //choose a random index and move the letter 
         var pos = arrOfLet[randomNum];
         finArr.push(pos);
         var index = arrOfLet.indexOf(pos);
@@ -61572,37 +61571,43 @@ function printOnScreen() {
     printArray(possibleWords, wordsGuessed);
     let input = prompt('Enter a Guess:');
     while (input != null) {
-        if (input == '*') {
+        if (input == '*') {             //scrambles the letters
             scramb = scramble(rootWord);
             console.clear();
-            console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
+            console.log("Avalible Letters: " + scramb.toString());
             printArray(possibleWords, wordsGuessed);
             alert("scrambling letters....!");
-        } else if (input.length < 3 || input.length > 6) {
+        } else if (input.length < 3 || input.length > 6) {      //alerts the user to an incorrect input size
             alert("insufficient length of word! Please enter a 3-6 letter word");
-        } else if (possibleWords.includes(input)) {
+        } else if (possibleWords.includes(input)) {         //if it is the right length then....
             if (!wordsGuessed.includes(input)) {
                 wordsGuessed.push(input);
                 alert("CORRECT!!");
-                if (wordsGuessed.length == possibleWords.length) {
+                if (wordsGuessed.length == possibleWords.length) {  //if all words have been guessed alert the user
                     alert("CONGRATS YOU WIN!!");
                     console.clear();
                     console.log('ALL WORDS WERE GUESSED!')
                     printArray(possibleWords, wordsGuessed);
                     break;
-                } else {
+                } else {                            //otherwise keep playing
                     console.clear();
                     console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
                     printArray(possibleWords, wordsGuessed);
                 }
             } else {
-                alert("Already Guessed this word!!");
+                alert("Already Guessed this word!!");       //already guessed word
                 console.clear();
                 console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
                 printArray(possibleWords, wordsGuessed);
             }
-        } else if (input.length >= 3 && input.length <= 6 && !dictionary.includes(input)) {
+        } else if (input.length >= 3 && input.length <= 6 && !dictionary.includes(input)) {//shares if it is not found in the dictionary
             alert("Not an English word!");
+            console.clear();
+            console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
+            printArray(possibleWords, wordsGuessed);
+
+        } else {        //if the word is not part of the input
+            alert("Not part of this scramble!!");
             console.clear();
             console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
             printArray(possibleWords, wordsGuessed);
@@ -61610,9 +61615,9 @@ function printOnScreen() {
         }
         input = prompt('Enter a Guess:');
     }
-    if (input == null) {
+    if (input == null) {        //if the uder pushes cancel...
         console.clear();
-        console.log("Good Try! Here were the word combinations:");
+        console.log("Good Try! You got " + wordsGuessed.length + ' out of ' + possibleWords.length + " correct!");
         printArray(possibleWords, possibleWords);
     }
 }
@@ -61626,13 +61631,13 @@ function printArray(arr, guessedArr) {
     var printArr = '';
     for (var i = 0; i < arr.length; i++) {
         for (var b = 0; b < arr[i].length; b++) {
-            blank += '_ '
+            blank += '_ ';           //adds the blank letters to an string
         }
         if ((blank.length / 2) == arr[i].length) {
             if (guessedArr.includes(arr[i])) {
-                printArr += (arr[i] + '\n');
+                printArr += (arr[i] + '\n'); //if the word has been guessed then add it to the printer 
             } else {
-                printArr += (blank + '\n');
+                printArr += (blank + '\n');//if not print the blank spaces.
             }
         }
         blank = '';
