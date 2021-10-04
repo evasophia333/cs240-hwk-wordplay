@@ -61350,9 +61350,13 @@ function arrOfLetters(word) {
     }
     return arr;
 }
-///////????
+/**
+ * gets all the permutations of a string 
+ * @param {} string 
+ * @returns an array of permutations
+ */
 function getPermutations(string) {
-    var results = [];
+    var results = new Array();
     if (string.length === 1) {
         results.push(string);
         return results;
@@ -61367,7 +61371,11 @@ function getPermutations(string) {
     }
     return results;
 }
-
+/**
+ * gets all the substrings of a string 
+ * @param {} str1 
+ * @returns an array of substrings
+ */
 function substrings(str1) {
     var finalArr = new Array();
     var y = 1;
@@ -61393,7 +61401,9 @@ function substrings(str1) {
 
 /**
  * Makes the substring of the string 
- *Determines the permutations of all the substrings
+ * Determines the permutations of all the substrings
+ * @param string a word
+ * @returns a list of all the permutations of the string and its substrings
  */
 function permOfSubstring(string) {
     var arra = new Array();
@@ -61415,8 +61425,7 @@ function permOfSubstring(string) {
 /**
  * Makes a hashmap of all letter words 
  * (key is number of letters value is an array of all words)
- * 
- * @returns 
+ * @returns a hashmap of the dictionary 
  */
 function hashLength() {
     var dict = removeWrongLength();
@@ -61426,12 +61435,10 @@ function hashLength() {
     var arr4 = new Array();
     var arr5 = new Array();
     var arr6 = new Array();
-
     hashWords.set(3, arr3);
     hashWords.set(4, arr4);
     hashWords.set(5, arr5);
     hashWords.set(6, arr6);
-
     for (var i = 0; i < dict.length; i++) {
         var word1 = dict[i];
         if (word1.length >= 3 && word1.length <= 6) {
@@ -61455,23 +61462,19 @@ function hashLength() {
 /**
  * Makes a hashmap of the six letter word and its possible permutations 
  * (key is number of letters value is an array of all words)
- * 
- * @returns 
+ * @returns a hashmap of all the permutations of a six letter word
  */
 function hashOfPerms(sixLetterWord) {
     var arrOfPerm = permOfSubstring(sixLetterWord);
-
     var hashWords = new Map();
     var arr3 = new Array();
     var arr4 = new Array();
     var arr5 = new Array();
     var arr6 = new Array();
-
     hashWords.set(3, arr3);
     hashWords.set(4, arr4);
     hashWords.set(5, arr5);
     hashWords.set(6, arr6);
-
     for (var i = 0; i < arrOfPerm.length; i++) {
         var word1 = arrOfPerm[i];
         if (word1.length >= 3 && word1.length <= 6) {
@@ -61491,7 +61494,11 @@ function hashOfPerms(sixLetterWord) {
     }
     return hashWords;
 }
-
+/**
+ * determines all possible words that a six letter word can make that are in the dictionary
+ * @param {} sixLetterWord 
+ * @returns an arry of all words possible
+ */
 function findAllWordsPossible(sixLetterWord) {
     var hshOfPerm = hashOfPerms(sixLetterWord);
     var finalArr = new Array();
@@ -61543,49 +61550,34 @@ function removeWrongLength() {
 function scramble(rootWord) {
     var finArr = new Array();
     var arrOfLet = arrOfLetters(rootWord);
-    console.log(arrOfLet)
     for (var i = 0; i <= arrOfLet.length; i++) {
         var randomNum = Math.trunc(Math.random() * arrOfLet.length);
         var pos = arrOfLet[randomNum];
         finArr.push(pos);
-        //console.log(randomNum)
         var index = arrOfLet.indexOf(pos);
         arrOfLet.splice(index, 1);
         i = 0;
     }
     return finArr;
 }
-//console.log(scramble('exists'));
-
-function printedArrOnScreen(guess, possibleWords) {
-    for (var i = 0; i < possibleWords.length; i++) {
-
-    }
-}
-
-////var words = findAllWordsPossible('exists');
-//console.log(words);
-//printedArrOnScreen(words);
-
-//console.log(findAllWordsPossible(randomWord()));
+/**
+ * prints the game to the users screen
+ */
 function printOnScreen() {
     var rootWord = randomWord();
-    console.log(rootWord);                          //determine random root word
     var possibleWords = findAllWordsPossible(rootWord);     //determines all posible word combinations 
     var scramb = scramble(rootWord);                        //scrambles the root word
     var wordsGuessed = new Array();
-    //console.log(scramb)
     console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
-    //prints the empty list of letters to the screen 
-    printInList(printer(null, possibleWords));
+    printArray(possibleWords, wordsGuessed);
     let input = prompt('Enter a Guess:');
     while (input != null) {
         if (input == '*') {
             scramb = scramble(rootWord);
             console.clear();
-            alert("scrambling letters....!");
             console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
-            printInList(printer(null, possibleWords));
+            printArray(possibleWords, wordsGuessed);
+            alert("scrambling letters....!");
         } else if (input.length < 3 || input.length > 6) {
             alert("insufficient length of word! Please enter a 3-6 letter word");
         } else if (possibleWords.includes(input)) {
@@ -61594,25 +61586,26 @@ function printOnScreen() {
                 alert("CORRECT!!");
                 if (wordsGuessed.length == possibleWords.length) {
                     alert("CONGRATS YOU WIN!!");
+                    console.clear();
                     console.log('ALL WORDS WERE GUESSED!')
-                    console.log(wordsGuessed);
-                    input == null;
+                    printArray(possibleWords, wordsGuessed);
+                    break;
                 } else {
                     console.clear();
                     console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
-                    printInList(printer(input, possibleWords));
+                    printArray(possibleWords, wordsGuessed);
                 }
             } else {
                 alert("Already Guessed this word!!");
                 console.clear();
                 console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
-                printInList(printer(input, possibleWords));
+                printArray(possibleWords, wordsGuessed);
             }
         } else if (input.length >= 3 && input.length <= 6 && !dictionary.includes(input)) {
             alert("Not an English word!");
             console.clear();
             console.log("Avalible Letters: " + scramb.toString());  //alerts the user of the avalible letters
-            printInList(printer(null, possibleWords));
+            printArray(possibleWords, wordsGuessed);
 
         }
         input = prompt('Enter a Guess:');
@@ -61620,47 +61613,35 @@ function printOnScreen() {
     if (input == null) {
         console.clear();
         console.log("Good Try! Here were the word combinations:");
-        console.log(possibleWords);
+        printArray(possibleWords, possibleWords);
     }
-}
-
-function printer(guessedArray, possibleWords) {
-    var guessedWords = new Array();
-    var word = '';
-
-    for (var a = 0; a < possibleWords.length; a++) {
-        for (var b = 0; b < possibleWords[a].length; b++) {
-            word += '_ ';
-            if (possibleWords[a].length == b + 1) {
-                guessedWords.push(word);
-                word = '';
-            }
-        }
-    }
-    for (var b = 0; b < guessedArray.length; b++) {
-        var gussedWrd = guessedArray[b];
-        console.log(gussedWrd)
-        console.log(guessedWords)
-        if (possibleWords.includes(gussedWrd)) {
-            var index = possibleWords.indexOf(guessedWords);
-            guessedWords.splice(index, 1, gussedWrd);
-        }
-    }
-    console.log(guessedWords);
-    console.log(possibleWords)
-    return guessedWords;
-
 }
 /**
- * 
- * @param {*} guessed return gussed WOrds should be input here
+ * prints an array to the users screen with words that have been guessed showing and words that have not beed guessed as _ 
+ * @param {} arr 
+ * @param {*} guessedArr 
  */
-function printInList(guessed) {
-    for (var i = 0; i < guessed.length; i++) {
-        console.log(guessed[i] + '\n');
+function printArray(arr, guessedArr) {
+    var blank = '';
+    var printArr = '';
+    for (var i = 0; i < arr.length; i++) {
+        for (var b = 0; b < arr[i].length; b++) {
+            blank += '_ '
+        }
+        if ((blank.length / 2) == arr[i].length) {
+            if (guessedArr.includes(arr[i])) {
+                printArr += (arr[i] + '\n');
+            } else {
+                printArr += (blank + '\n');
+            }
+        }
+        blank = '';
     }
+    console.log(printArr);
 }
-var possibleWords = findAllWordsPossible('exists');
-var guessed = ['sex', 'exists', 'sit', 'exit']
-printer(guessed, possibleWords);
-//printOnScreen();
+
+
+//* Runs the game here!!
+printOnScreen();
+
+
