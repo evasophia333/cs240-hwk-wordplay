@@ -1,5 +1,3 @@
-
-
 const dictionary = [
     "a",
     "aa",
@@ -61340,59 +61338,17 @@ const dictionary = [
 
 
 /**
- * Determines if a word is the correct length
- * @param {*} word 
- * @returns boolean 
- */
-function correctLength(word) {
-    if (word.length <= 6 && word.length >= 3) {
-        return true;
-    }
-    return false;
-}
-/**
  * Puts a word into an array of letters
  * @param {*} word 
  * @returns 
  */
 function arrOfLetters(word) {
     let arr = []
-    for (var i = 0; i <= word.length; i++) {
+    for (var i = 0; i < word.length; i++) {
         var item = word.substring(i, i + 1);
         arr.push(item);
     }
     return arr;
-}
-
-/**
- * Determines if the letters in item can be found within word1
- * Assumes all letters are lower case
- * @param {*} word1 is the largest word
- * @param {*} word2 is a possible word
- */
-function correctWord(word1, item) {
-    var wordArr = arrOfLetters(word1);                  //creates an array for the 6 letter word
-    var itemArr = arrOfLetters(item);                   //creates an array for the word that might be inside the 6 letter word
-    if (correctLength(item)) {
-        for (var i = itemArr.length - 1; i >= 0; i--) {
-            var letter = itemArr[i];                //determines what letter is at the i position in itemArr
-            console.log("i" + i);
-            console.log("Letter:" + letter);
-            if (wordArr.includes(letter)) {                 //determines if the letter is in the word 
-                itemArr.splice(itemArr.indexOf(letter), 1); //if it is remove from both arrays 
-                wordArr.splice(wordArr.indexOf(letter), 1);
-            } else {
-                return false;
-            }
-            console.log(wordArr);
-            console.log(itemArr);
-        }
-        if (itemArr.length > 0) {       //if all items have been removed from itemArr then all letters in item are in arr
-            return false;               //so return true because the word could be a possible word.
-        } else {
-            return true;
-        }
-    }
 }
 ///////????
 function getPermutations(string) {
@@ -61412,28 +61368,39 @@ function getPermutations(string) {
     return results;
 }
 
-function getAllSubstrings(str) {
-    var i, j, result = [];
-
-    for (i = 0; i < str.length; i++) {
-        for (j = i + 1; j < str.length + 1; j++) {
-            result.push(str.slice(i, j));
+function substrings(str1) {
+    var finalArr = new Array();
+    var y = 1;
+    var arr = new Array();
+    var temp = "";
+    for (var x = 0; x < str1.length; x++) {
+        finalArr[x] = str1.substring(x, y);
+        y++;
+    }
+    for (var i = 0; i < Math.pow(2, finalArr.length); i++) {
+        temp = "";
+        for (var j = 0; j < finalArr.length; j++) {
+            if ((i & Math.pow(2, j))) {
+                temp += finalArr[j];
+            }
+        }
+        if (temp != "") {
+            arr.push(temp);
         }
     }
-    return result;
+    return arr;
 }
 
-
-/*
-Makes the substring of the string 
-Determines the permutations of all the substrings 
-*/
+/**
+ * Makes the substring of the string 
+ *Determines the permutations of all the substrings
+ */
 function permOfSubstring(string) {
     var arra = new Array();
     var theString = string;
-    var len = getAllSubstrings(theString).length;
+    var len = substrings(theString).length;
     for (var b = 0; b < len; b++) {
-        var str = getAllSubstrings(theString);
+        var str = substrings(theString);
         var word = str[b];
         var arr = getPermutations(word);
         for (var i = 0; i < arr.length; i++) {
@@ -61444,7 +61411,6 @@ function permOfSubstring(string) {
     }
     return arra;
 }
-//console.log(permOfSubstring('rutted'));
 
 /**
  * Makes a hashmap of all letter words 
@@ -61485,8 +61451,6 @@ function hashLength() {
     }
     return hashWords;
 }
-//console.log(hashLength());
-//console.log(hashLength().get(3).includes('yul'));
 
 /**
  * Makes a hashmap of the six letter word and its possible permutations 
@@ -61528,16 +61492,10 @@ function hashOfPerms(sixLetterWord) {
     return hashWords;
 }
 
-//console.log(hashOfPerms('rutted'));
-
-
-
 function findAllWordsPossible(sixLetterWord) {
     var hshOfPerm = hashOfPerms(sixLetterWord);
-    console.log(hshOfPerm);
     var finalArr = new Array();
     for (var a = 0; a < 4; a++) {
-        console.log(a)
         var locations = hshOfPerm.get(a + 3);
         var words = hashLength().get(a + 3);
         for (var i = 0; i < locations.length; i++) {
@@ -61549,8 +61507,6 @@ function findAllWordsPossible(sixLetterWord) {
     }
     return finalArr;
 }
-
-//console.log(findAllWordsPossible('rutted'));
 
 /**
  * Determines a Random 6 letter word 
@@ -61565,10 +61521,6 @@ function randomWord() {
     return word;
 }
 
-//console.log(randomWord());
-
-
-
 /**
  * Removes all the strings that are too long or too short
  * @returns newArray of correct length strings
@@ -61576,61 +61528,42 @@ function randomWord() {
 function removeWrongLength() {
     var updatedDictionary = []
     for (var i = 0; i < dictionary.length; i++) {
-        if (correctLength(dictionary[i])) {
+        if (dictionary[i].length <= 6 && dictionary[i].length >= 3) {
             updatedDictionary.push(dictionary[i]);
-            //console.log(dictionary[i]);
         }
     }
-    //console.log(updatedDictionary.length);
     return updatedDictionary;
 }
 
 /**
- * 
- * @param {*} baseWord is the 6 letter, longest word
+ * scrambles a root word
+ * @param {} rootWord 
+ * @returns the word scrambled
  */
-function listOfWords(baseWord) {
-    var updated = removeWrongLength();
-    var listArr = [];
-    for (var i = 0; i <= updated.length; i++) {
-        var word = updated[i];
-        if (correctWord(baseWord, word)) {
-            listArr.push(word);
-        }
+function scramble(rootWord) {
+    var finArr = new Array();
+    var arrOfLet = arrOfLetters(rootWord);
+    for (var i = 0; i <= arrOfLet.length; i++) {
+        var randomNum = Math.trunc(Math.random() * arrOfLet.length);
+        var pos = arrOfLet[randomNum];
+        finArr.push(pos);
+        var index = arrOfLet.indexOf(pos);
+        arrOfLet.splice(index, 1);
+        i = 0;
     }
-    console.log(listArr);
+    return finArr;
 }
 
-function containsLetter(letter, diction) {
-    var arr = new Array();
-    for (var i = 0; i < diction.length; i++) {
-        var word = diction[i];
-        console.log(word);
-        if (word.includes(letter)) {
-            arr.push(word);
-        }
-    }
+function printedArrOnScreen(possibleWords) {
+
 }
 
-/**
- * Finds All 6 letter words in the dictionary
- * @returns Array of all 6 letter words
- */
-function sixLetterWords() {
-    var updatedDiction = removeWrongLength();
-    var sixLetterArr = new Array();
-    for (var i = 0; i <= updatedDiction.length - 1; i++) {
-        if (updatedDiction[i].length == 6) {
-            sixLetterArr.push(updatedDiction[i]);
-        }
-    }
-    return sixLetterArr;
+//console.log(findAllWordsPossible(randomWord()));
+function printOnScreen() {
+    var rootWord = randomWord();
+    var possibleWords = findAllWordsPossible(rootWord);
+    var scramb = scramble(rootWrod);
+
+    let input = prompt('Enter a Guess:');
 }
-
-
-
-//correctWord("zither", "his")
-//listOfWords("zither");
-//console.log(sixLetterWords());
-
 
